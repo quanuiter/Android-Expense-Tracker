@@ -49,4 +49,4 @@ Máy hiện tại đang trỏ `PATH` vào Java 8 và chưa có Android SDK. Có 
 - Entity Room không đi thẳng lên UI; Repository ánh xạ sang model nghiệp vụ.
 - Không commit `google-services.json`, keystore, ảnh hóa đơn hay file export.
 
-Xem mô tả sâu hơn tại [Kiến trúc](docs/ARCHITECTURE.md), [Mô hình dữ liệu](docs/DATA_MODEL.md) và [Lộ trình](docs/ROADMAP.md).
+Nếu cần hiểu project từ file đầu tiên, đọc [Hướng dẫn xây dựng từ số 0](docs/HUONG_DAN_XAY_DUNG_TU_ZERO.md). Các tài liệu tham khảo tiếp theo gồm [Kiến trúc](docs/ARCHITECTURE.md), [Mô hình dữ liệu](docs/DATA_MODEL.md) và [Lộ trình](docs/ROADMAP.md).
