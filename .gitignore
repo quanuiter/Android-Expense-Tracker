@@ -1,0 +1,23 @@
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Local Android SDK path and secrets
+local.properties
+*.jks
+*.keystore
+google-services.json
+
+# Generated captures and exports
+captures/
+exports/
+
+# OS files
+.DS_Store
+Thumbs.db
+AGENTS.MD
