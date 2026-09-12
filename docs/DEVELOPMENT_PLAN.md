@@ -1,367 +1,188 @@
 # Kế hoạch phát triển SpendWise
 
-> Baseline: 12/09/2026  
-> Thời lượng giả định: 12 tuần, 6 sprint, mỗi sprint 2 tuần  
-> Quy mô nhóm: 3 thành viên
+> Cập nhật: 12/09/2026
+>
+> Giai đoạn hiện tại: Sprint 1 — Hoàn thiện thu chi local
 
-## 1. Mục tiêu sản phẩm
+## 1. Mục tiêu Sprint 1
 
-SpendWise là ứng dụng quản lý tài chính cá nhân theo hướng offline-first dành cho người Việt. Bản hoàn chỉnh cần giúp người dùng:
+Sprint 1 biến bản hiện tại từ một ứng dụng nhập khoản chi cơ bản thành sổ thu chi local có thể sử dụng được. Khi kết thúc sprint, người dùng phải có thể:
 
-1. Quản lý thu, chi và chuyển tiền giữa nhiều ví.
-2. Theo dõi ngân sách tổng và ngân sách theo danh mục.
-3. Hiểu dòng tiền bằng dashboard và biểu đồ.
-4. Quét hóa đơn để giảm thời gian nhập liệu.
-5. Dùng được khi mất mạng và đồng bộ an toàn khi có tài khoản.
-6. Chủ động sở hữu dữ liệu qua chức năng export.
+- Thêm khoản thu và khoản chi.
+- Xem chi tiết, sửa, xóa và hoàn tác giao dịch.
+- Chọn chính xác ngày, giờ của giao dịch.
+- Thấy tổng thu, tổng chi và số dư của tháng hiện tại.
+- Dùng toàn bộ luồng trên khi không có mạng.
 
-Điểm khác biệt được ưu tiên là **OCR hóa đơn Việt Nam trên thiết bị kết hợp kiến trúc offline-first**. Nhóm không cố sao chép toàn bộ Money Lover, MISA hoặc Wallet trong phiên bản đầu tiên.
+## 2. Hiện trạng làm nền
 
-## 2. Baseline hiện tại
-
-### Đã hoạt động
-
-- Project Android Kotlin, Jetpack Compose, Material 3, Navigation và Hilt.
-- Room database cho giao dịch và ngân sách tháng.
-- Chế độ local bằng user tạm `local-demo-user`.
-- Thêm khoản chi thủ công.
-- Xem danh sách giao dịch.
-- Đặt/cập nhật ngân sách tháng hiện tại.
-- Dashboard hiển thị tổng chi, số còn lại và trạng thái vượt ngân sách.
-- Model có `syncState`, soft delete và các trường dành cho ảnh/OCR.
+- Project Android dùng Kotlin, Jetpack Compose, Material 3, Navigation và Hilt.
+- Room đang lưu giao dịch và ngân sách tháng.
+- Có chế độ local với người dùng tạm `local-demo-user`.
+- Đã thêm khoản chi thủ công và hiển thị danh sách giao dịch.
+- Dashboard đã có tổng chi, số còn lại và trạng thái ngân sách.
+- Model đã có `syncState`, soft delete và các trường dành cho ảnh/OCR.
 - Build debug và unit test hiện tại chạy thành công.
 
-### Mới là khung hoặc chưa có
-
-- Sửa/xóa giao dịch trên UI, khoản thu, chuyển tiền, chọn ngày.
-- Ví, danh mục tùy chỉnh, tìm kiếm và bộ lọc.
-- Ngân sách theo danh mục, biểu đồ và notification.
-- CameraX, ML Kit, receipt parser và màn hình xác nhận OCR.
-- Firebase Authentication, Firestore và WorkManager sync.
-- Giao dịch định kỳ, export, biometric và test đầy đủ.
+## 3. Cách tổ chức công việc
 
-## 3. Phạm vi phiên bản mục tiêu
-
-### Bắt buộc
+Sprint 1 có đúng 9 issue có thể nhận độc lập. Mỗi issue là một lát cắt hoàn chỉnh: người nhận tự làm các thay đổi cần thiết từ Room/repository đến ViewModel/UI và kiểm thử trong phạm vi chức năng đó.
 
-- CRUD giao dịch đầy đủ.
-- Khoản thu, khoản chi và chuyển tiền.
-- Nhiều ví và danh mục tùy chỉnh.
-- Tìm kiếm, lọc và tổng hợp giao dịch.
-- Ngân sách tổng và theo danh mục.
-- Dashboard thu, chi, số dư, tài sản và biểu đồ.
-- Cảnh báo ngân sách 80% và 100%.
-- Scan hóa đơn end-to-end, luôn có bước xác nhận.
-- Firebase Auth và đồng bộ offline-first.
-- Giao dịch định kỳ.
-- Export CSV.
-- Migration, kiểm thử và xử lý trạng thái lỗi.
+- Không gắn issue cố định cho thành viên.
+- Thành viên tự claim issue bằng cách tự gán mình trên GitHub.
+- Không chia theo tầng UI, data hoặc analytics vì cách đó khiến một issue phải chờ issue khác.
+- Mã `S1-01` đến `S1-09` là thứ tự quản lý, không phải quan hệ phụ thuộc bắt buộc.
+- Nếu hai issue cùng chạm một contract dùng chung, người làm thống nhất trong PR trước khi merge.
 
-### Có thể làm nếu còn thời gian
+## 4. Các chức năng cần hoàn thiện
 
-- Ví gia đình/chia sẻ.
-- PIN hoặc biometric.
-- Mục tiêu tiết kiệm.
-- Import CSV.
-- Dark mode tùy chọn.
-- Dự báo chi tiêu cuối tháng.
+### S1-01 — Xem chi tiết giao dịch
 
-### Ngoài phạm vi phiên bản này
+**Kết quả người dùng nhận được:** Chạm vào một giao dịch trong danh sách sẽ mở màn hình hiển thị đầy đủ số tiền, loại giao dịch, danh mục, ghi chú và thời gian.
 
-- Liên kết ngân hàng thật.
-- Quản lý đầu tư, vàng hoặc chứng khoán.
-- Thuế thu nhập cá nhân.
-- AI chatbot tài chính.
-- Quản lý vay/nợ phức tạp.
-- Đa tiền tệ và tỷ giá trực tuyến.
+**Code cần phát triển:**
 
-## 4. Ownership
+- DAO/repository đọc một giao dịch theo cả `id` và `userId`.
+- ViewModel nạp dữ liệu và biểu diễn trạng thái đang tải, thành công, không tìm thấy và lỗi.
+- Route điều hướng có `transactionId` và màn hình chi tiết Compose.
+- Unit test cho truy vấn, mapping và trạng thái ViewModel.
 
-| Thành viên | Ownership chính | Trách nhiệm |
-|---|---|---|
-| TV1 — UI/UX & giao dịch | `feature/transaction`, `feature/wallet`, `feature/auth`, `feature/profile`, navigation, design system | Luồng người dùng, form, danh sách, filter, accessibility và trạng thái UI |
-| TV2 — Data & cloud | `core/database`, `core/data`, `core/di`, Firebase, WorkManager, migration | Schema, DAO, repository, Auth, sync, export và test tầng dữ liệu |
-| TV3 — OCR & insight | `feature/receipt`, `feature/dashboard`, `feature/budget`, notification | Camera/OCR/parser, ngân sách, biểu đồ, cảnh báo và test tính toán |
+**Hoàn thành khi:** Mở đúng giao dịch của người dùng hiện tại, không hiển thị dữ liệu đã xóa hoặc của người dùng khác, và xử lý được mọi trạng thái màn hình.
 
-### File dùng chung
+### S1-02 — Sửa giao dịch
 
-Các thay đổi sau phải được cả nhóm thống nhất trước khi merge:
+**Kết quả người dùng nhận được:** Có thể mở giao dịch đã lưu, thay đổi thông tin hợp lệ và thấy dữ liệu mới ngay khi quay lại danh sách/dashboard.
 
-- Domain model và repository interface.
-- Room database version và migration.
-- Firestore document schema và Security Rules.
-- Navigation routes.
-- Version catalog và plugin build.
+**Code cần phát triển:**
 
-TV2 là người duyệt cuối cho schema/migration. TV1 là người duyệt cuối cho navigation. Thay đổi domain contract cần ít nhất hai thành viên review.
+- Repository cập nhật giao dịch có kiểm tra `id + userId`.
+- Form sửa được điền sẵn dữ liệu hiện tại và dùng lại validation của form giao dịch.
+- ViewModel quản lý tải dữ liệu, lưu, thành công và lỗi.
+- Cập nhật `updatedAt` và trạng thái chờ đồng bộ khi lưu.
+- Test cập nhật thành công, dữ liệu không hợp lệ và giao dịch không thuộc người dùng.
 
-## 5. Thứ tự phụ thuộc
+**Hoàn thành khi:** Dữ liệu Room thay đổi đúng một bản ghi, UI phản ánh kết quả mới và lỗi không làm mất dữ liệu đang nhập.
 
-```text
-Data model ổn định
-    ↓
-CRUD + ví + danh mục
-    ↓
-Ngân sách + dashboard
-    ↓
-OCR và giao dịch định kỳ
-    ↓
-Firebase sync
-    ↓
-Export + hardening + phát hành
-```
+### S1-03 — Xóa và hoàn tác giao dịch
 
-Không bắt đầu Firestore schema trước khi model giao dịch, ví và danh mục của Sprint 2 được chốt.
+**Kết quả người dùng nhận được:** Có thể xác nhận xóa giao dịch và bấm Hoàn tác trong Snackbar để khôi phục.
 
-## 6. Kế hoạch sprint
+**Code cần phát triển:**
 
-## Sprint 1 — Sổ thu chi local hoàn chỉnh
+- Soft delete và restore trong DAO/repository, đều kiểm tra `id + userId`.
+- Hộp thoại xác nhận xóa và Snackbar có hành động Hoàn tác.
+- ViewModel xử lý đang xóa, xóa thành công, hoàn tác và lỗi.
+- Test bản ghi bị ẩn sau xóa, xuất hiện lại sau hoàn tác và không xóa nhầm dữ liệu.
 
-### Mục tiêu
+**Hoàn thành khi:** Xóa không loại bỏ vật lý bản ghi, danh sách/dashboard cập nhật đúng và hoàn tác khôi phục đủ dữ liệu.
 
-Hoàn thành CRUD khoản thu/chi khi không có mạng và ổn định contract giữa UI, repository và Room.
+### S1-04 — Thêm và hiển thị khoản thu
 
-### TV1
+**Kết quả người dùng nhận được:** Form cho chọn khoản thu hoặc khoản chi; danh sách phân biệt rõ hai loại và hiển thị dấu/màu đúng.
 
-- Màn hình chi tiết giao dịch.
-- Sửa và xóa giao dịch.
-- Chọn khoản thu/khoản chi.
-- Date/time picker.
-- Xác nhận xóa và Undo.
-- Loading, success và error state.
+**Code cần phát triển:**
 
-### TV2
+- Bộ chọn `INCOME`/`EXPENSE` trong form và state của ViewModel.
+- Lưu đúng `TransactionType` qua repository.
+- Trình bày khoản thu và khoản chi nhất quán trong danh sách/chi tiết.
+- Test lưu hai loại giao dịch và mapping hiển thị.
 
-- Nâng repository để đọc một giao dịch, cập nhật và soft delete có `userId`.
-- Bổ sung query theo khoảng ngày, type và category.
-- Viết migration thay vì destructive migration.
-- Test DAO, repository, mapper và converter.
+**Hoàn thành khi:** Người dùng thêm được cả thu lẫn chi offline, dữ liệu lưu đúng loại và UI không nhầm dấu số tiền.
 
-### TV3
+### S1-05 — Chọn ngày giờ giao dịch
 
-- Query tổng thu, tổng chi và số dư theo tháng.
-- Dashboard hiển thị ba số tổng cơ bản.
-- Test tính khoảng thời gian theo timezone và chuyển tháng.
+**Kết quả người dùng nhận được:** Có thể chọn ngày và giờ thực tế thay vì mọi giao dịch luôn dùng thời điểm hiện tại.
 
-### Điều kiện kết thúc
+**Code cần phát triển:**
 
-- Airplane mode vẫn thêm, xem, sửa và xóa được giao dịch.
-- Người dùng chọn được ngày và loại thu/chi.
-- Dashboard cập nhật đúng sau mọi thao tác.
-- Không còn lỗi mất dữ liệu hoặc tạo trùng do nhấn lưu nhiều lần.
+- Date picker, time picker và state cho thời điểm đang chọn.
+- Chuyển đổi `LocalDateTime` sang thời điểm lưu trữ bằng múi giờ thiết bị.
+- Hiển thị lại ngày giờ đã chọn trong form, danh sách và chi tiết.
+- Test ngày thường, biên tháng và chuyển đổi múi giờ.
 
-## Sprint 2 — Ví, danh mục, filter và ngân sách
+**Hoàn thành khi:** Thời điểm lưu và hiển thị khớp lựa chọn của người dùng, kể cả khi giao dịch thuộc tháng khác.
 
-### Mục tiêu
+### S1-06 — Chống lưu trùng và hiển thị trạng thái lưu
 
-Đưa SpendWise từ một danh sách khoản chi thành sổ tài chính có cấu trúc.
+**Kết quả người dùng nhận được:** Nút lưu chỉ tạo một giao dịch dù bấm nhanh nhiều lần; màn hình báo rõ đang lưu, thành công hoặc thất bại.
 
-### TV1
+**Code cần phát triển:**
 
-- UI danh sách/tạo/sửa/ẩn ví.
-- UI quản lý danh mục.
-- Chọn ví và danh mục trong form giao dịch.
-- Tìm kiếm, filter và sort giao dịch.
-- UI chuyển tiền giữa ví.
+- Trạng thái `isSaving`, success/error event và vô hiệu hóa submit khi đang xử lý.
+- Bảo vệ ViewModel/repository trước nhiều yêu cầu lưu đồng thời.
+- Giữ lại dữ liệu form khi lưu lỗi và cho phép thử lại.
+- Test double-submit, lưu thành công và lỗi repository.
 
-### TV2
+**Hoàn thành khi:** Một thao tác lưu chỉ tạo một bản ghi, không điều hướng lặp và lỗi có thể phục hồi.
 
-- Thêm `WalletEntity` và `CategoryEntity`.
-- Chuyển category enum sang dữ liệu Room có migration.
-- Bổ sung liên kết ví vào giao dịch.
-- Thiết kế chuyển tiền không làm tăng tổng thu/chi.
-- Query số dư ví và query theo filter.
-- Test migration và toàn vẹn số dư.
+### S1-07 — Lưu schema Room và bổ sung kiểm thử dữ liệu
 
-### TV3
+**Kết quả kỹ thuật:** Schema database được lưu trong version control và các contract dữ liệu quan trọng có kiểm thử để tránh regression khi các chức năng khác thay đổi Room.
 
-- Ngân sách tổng và ngân sách theo danh mục.
-- Chọn tháng/ngày bắt đầu/chu kỳ ngân sách.
-- Màu trạng thái an toàn, sắp vượt và đã vượt.
-- Notification ở ngưỡng 80% và 100%, không gửi trùng.
+**Code cần phát triển:**
 
-### Điều kiện kết thúc
+- Bật Room schema export và commit schema version 1.
+- Test converter, mapper, DAO CRUD, soft delete/restore và isolation theo `userId`.
+- Test repository cho các thao tác đọc, thêm, sửa, xóa và khôi phục.
+- Cập nhật cấu hình test cần thiết cho Room.
 
-- Có nhiều ví và số dư từng ví chính xác.
-- Chuyển tiền không làm thay đổi tổng tài sản.
-- Người dùng tạo được danh mục riêng.
-- Filter và số tổng luôn dùng cùng tập dữ liệu.
-- Thêm khoản chi cập nhật đúng mọi ngân sách liên quan.
+**Hoàn thành khi:** Schema có thể dùng cho migration test về sau và toàn bộ test dữ liệu chạy ổn định, độc lập.
 
-## Sprint 3 — Dashboard nâng cao và OCR hóa đơn
+### S1-08 — Hiển thị tổng thu, tổng chi và số dư tháng
 
-### Mục tiêu
+**Kết quả người dùng nhận được:** Dashboard hiển thị ba số riêng biệt của tháng: tổng thu, tổng chi và số dư `thu - chi`; số liệu tự đổi sau thao tác giao dịch.
 
-Tạo giá trị khác biệt: nhập liệu bằng hóa đơn và báo cáo đủ thuyết phục.
+**Code cần phát triển:**
 
-### TV1
+- DAO query tổng tiền theo `userId`, loại giao dịch và khoảng thời gian, bỏ qua bản ghi đã xóa.
+- Repository cung cấp các `Flow` tổng hợp.
+- Dashboard ViewModel kết hợp dữ liệu thành UI state.
+- Ba thẻ số liệu Compose và empty/error state phù hợp.
+- Test phép tính với thu, chi, dữ liệu rỗng và bản ghi đã xóa.
 
-- Camera/gallery entry UI.
-- Màn hình xem lại ảnh.
-- Màn hình xác nhận/chỉnh sửa kết quả OCR.
-- Trạng thái đang quét, quét lỗi và nhập tay thay thế.
+**Hoàn thành khi:** Ba số khớp dữ liệu Room của tháng đang xem và cập nhật phản ứng sau create/update/delete/restore.
 
-### TV2
+### S1-09 — Tự cập nhật tháng và xử lý múi giờ
 
-- Lưu ảnh trong app-specific storage.
-- Gắn URI ảnh và raw OCR text vào giao dịch.
-- Dọn ảnh khi giao dịch bị xóa vĩnh viễn hoặc draft bị hủy.
-- Repository API lưu giao dịch từ `ReceiptDraft`.
+**Kết quả người dùng nhận được:** Khi sang tháng mới hoặc thay đổi múi giờ, dashboard dùng đúng khoảng thời gian mà không cần khởi động lại ứng dụng.
 
-### TV3
+**Code cần phát triển:**
 
-- Runtime camera permission.
-- CameraX preview và capture.
-- Chọn ảnh từ gallery.
-- ML Kit Text Recognition.
-- `DefaultReceiptTextParser` cho cửa hàng, ngày và tổng tiền.
-- `KeywordCategorySuggester` và confidence.
-- Biểu đồ danh mục, xu hướng 6 tháng và so sánh tháng trước.
+- Tách logic tính đầu/cuối tháng và cho phép inject `Clock`/`ZoneId` để kiểm thử.
+- Cơ chế làm mới khoảng tháng khi app quay lại foreground hoặc ngày hệ thống thay đổi.
+- Kết nối lại các `Flow` dashboard với khoảng tháng mới.
+- Test giao dịch tại biên đầu/cuối tháng và các múi giờ khác nhau.
 
-### Điều kiện kết thúc
+**Hoàn thành khi:** Không tính thiếu hoặc tính trùng giao dịch ở biên tháng và dashboard tự chuyển sang tháng mới.
 
-- Luồng `ảnh → OCR → xác nhận → giao dịch` chạy end-to-end.
-- Không tự lưu kết quả OCR khi người dùng chưa xác nhận.
-- Có tập test tối thiểu 30 hóa đơn Việt Nam.
-- Mục tiêu tham khảo: tổng tiền ≥ 90%, ngày ≥ 85%, cửa hàng ≥ 80%.
-- OCR thất bại vẫn cho phép nhập giao dịch thủ công.
+## 5. Definition of Done cho mọi issue
 
-## Sprint 4 — Tài khoản và đồng bộ cloud
+Một issue chỉ được đóng khi:
 
-### Mục tiêu
-
-Đồng bộ nhiều thiết bị mà không làm mất khả năng hoạt động offline.
-
-### TV1
-
-- Đăng ký, đăng nhập, quên mật khẩu và đăng xuất.
-- Profile và trạng thái đồng bộ.
-- UI lựa chọn nhập dữ liệu local vào tài khoản hoặc giữ tách biệt.
-- Hiển thị lỗi xác thực và lỗi đồng bộ rõ ràng.
-
-### TV2
-
-- Firebase project cho môi trường dev.
-- `FirebaseAuthRepository`.
-- Firestore remote data source.
-- Firestore Security Rules và rules test.
-- WorkManager upload/download queue.
-- Retry, last-write-wins, soft delete và chống tạo trùng.
-- Thay demo user bằng authenticated user context.
-
-### TV3
-
-- Bảo đảm ngân sách, thống kê và receipt metadata hoạt động sau sync.
-- Bộ kịch bản kiểm thử offline/online và hai thiết bị.
-- Hoàn thiện trạng thái lỗi liên quan ảnh/OCR chưa upload.
-
-### Điều kiện kết thúc
-
-- User A không đọc/ghi được dữ liệu user B.
-- Ghi offline rồi online lại không mất hoặc nhân đôi giao dịch.
-- Thiết bị thứ hai nhận được dữ liệu sau khi đăng nhập.
-- UI chỉ đọc Room; Firestore không cấp dữ liệu trực tiếp cho màn hình.
-
-## Sprint 5 — Tự động hóa và quyền sở hữu dữ liệu
-
-### Mục tiêu
-
-Giảm thao tác lặp lại và cho phép người dùng mang dữ liệu ra khỏi app.
-
-### TV1
-
-- UI giao dịch định kỳ.
-- UI export và bộ lọc phạm vi export.
-- Cài đặt notification, quyền riêng tư và xóa dữ liệu.
-
-### TV2
-
-- Recurring transaction scheduler idempotent.
-- CSV export theo khoảng ngày, ví, type và category.
-- Luồng xóa tài khoản/xóa local data an toàn.
-- Chuẩn bị shared wallet backend nếu Sprint 4 ổn định.
-
-### TV3
-
-- Dự báo chi tiêu cuối tháng.
-- Số tiền có thể chi mỗi ngày để không vượt ngân sách.
-- Regression test cho notification, dashboard và OCR.
-
-### Điều kiện kết thúc
-
-- Worker chạy lại không tạo giao dịch định kỳ trùng.
-- CSV mở đúng bằng Excel/Google Sheets và khớp dữ liệu được lọc.
-- Xóa tài khoản có xác nhận và không để lại dữ liệu nhạy cảm.
-
-## Sprint 6 — Hardening và phát hành
-
-### TV1
-
-- Accessibility, content description và font scaling.
-- Chuyển text hard-code sang string resources.
-- Hoàn thiện empty/loading/error state.
-- Chuẩn hóa UX và kịch bản demo.
-
-### TV2
-
-- Migration test, sync test, Security Rules test và recovery test.
-- Tối ưu query/index và kiểm tra dữ liệu lớn.
-- Chuẩn bị build release an toàn.
-
-### TV3
-
-- OCR regression và kiểm tra ảnh xấu.
-- Analytics/budget/notification tests.
-- Báo cáo độ chính xác OCR và giới hạn đã biết.
-
-### Cả nhóm
-
-- Không còn lỗi P0/P1.
-- Chạy smoke test trên thiết bị thật và emulator API thấp/cao.
-- Chuẩn bị dữ liệu demo, video và tài liệu kiến trúc.
-- Kiểm tra airplane mode, đổi tháng, đổi timezone và hai thiết bị.
-
-## 7. Definition of Done
-
-Một công việc chỉ được đánh dấu hoàn thành khi:
-
-- Có nghiệp vụ thật, không phải placeholder hoặc nút disabled.
+- Chức năng dùng dữ liệu thật, không phải placeholder.
 - Có loading, empty, success và error state phù hợp.
-- Hoạt động offline nếu thuộc luồng local.
-- Có validation và chống thao tác lặp.
-- Business logic có unit test.
-- DAO/schema thay đổi có database/migration test.
-- Không làm mất dữ liệu phiên bản trước.
-- Build debug và test liên quan chạy thành công.
-- Có ít nhất một thành viên khác review.
-- Tài liệu và checklist được cập nhật trong cùng PR.
+- Validation và chống thao tác lặp đã được xử lý nếu có nhập liệu.
+- Business logic và truy vấn mới có test.
+- Build debug và các test liên quan chạy thành công.
+- Không làm hỏng dữ liệu hoặc chức năng đang có.
+- PR mô tả cách kiểm thử và có ít nhất một người khác review.
+- Checklist được cập nhật trong cùng PR.
 
-## 8. Chỉ số nghiệm thu phiên bản
+## 6. Điều kiện kết thúc Sprint 1
 
-- 100% luồng CRUD chính hoạt động ở airplane mode.
-- Không tạo trùng trong các kịch bản retry/sync/recurring.
-- Security Rules chặn truy cập chéo user.
-- OCR được đánh giá trên ít nhất 30 hóa đơn, có báo cáo theo từng trường.
-- Không có crash P0 trong kịch bản demo.
-- Các phép tính thu, chi, số dư, chuyển tiền và ngân sách có test.
-- Export CSV đối chiếu đúng với dữ liệu Room.
+- CRUD khoản thu/chi hoạt động khi bật airplane mode.
+- Người dùng chọn được loại, ngày và giờ giao dịch.
+- Xóa là soft delete và có thể hoàn tác.
+- Dashboard cập nhật đúng sau thêm, sửa, xóa và hoàn tác.
+- Không tạo giao dịch trùng do bấm lưu nhiều lần.
+- Schema Room version 1 đã được lưu và các test liên quan đều qua.
 
-## 9. Rủi ro cần theo dõi
+## 7. Giai đoạn sau Sprint 1
 
-| Rủi ro | Biện pháp |
-|---|---|
-| Sửa schema liên tục | Chốt wallet/category/transaction trước Firestore |
-| OCR không chính xác | Confidence, màn hình xác nhận, tập dữ liệu thật và nhập tay fallback |
-| Sync làm mất/nhân đôi dữ liệu | Room là nguồn chính, operation id, idempotency và integration test |
-| Một thành viên bị nghẽn | Contract nhỏ, mock/fake repository và PR ngắn |
-| Phạm vi quá lớn | Giữ phần “ngoài phạm vi”; cắt shared wallet trước khi cắt test |
-| Merge conflict | Ownership rõ, không cùng sửa schema/routes trong một thời điểm |
+Chỉ tạo issue cho giai đoạn sau khi Sprint 1 đã được nghiệm thu. Backlog định hướng gồm:
 
-## 10. Nhịp làm việc đề xuất
-
-- Đầu sprint: chốt contract, acceptance criteria và người review.
-- Mỗi ngày: cập nhật checklist, blocker và PR đang mở.
-- Giữa sprint: tích hợp nhánh, không chờ đến ngày cuối.
-- Cuối sprint: demo trên APK thật, chạy test và ghi lại phần chưa đạt.
-- Công việc chưa đạt Definition of Done phải chuyển sprint, không đánh dấu hoàn thành một phần.
-
+1. Ví, danh mục tùy chỉnh, tìm kiếm và bộ lọc.
+2. Ngân sách theo danh mục, biểu đồ và cảnh báo.
+3. Quét hóa đơn bằng CameraX/ML Kit và màn hình xác nhận OCR.
+4. Firebase Authentication và đồng bộ offline-first.
+5. Giao dịch định kỳ, export CSV và hoàn thiện phát hành.
