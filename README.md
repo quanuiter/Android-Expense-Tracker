@@ -51,4 +51,4 @@ Máy hiện tại đang trỏ `PATH` vào Java 8 và chưa có Android SDK. Có 
 
 Nếu cần hiểu project từ file đầu tiên, đọc [Hướng dẫn xây dựng từ số 0](docs/HUONG_DAN_XAY_DUNG_TU_ZERO.md). Các tài liệu tham khảo tiếp theo gồm [Kiến trúc](docs/ARCHITECTURE.md), [Mô hình dữ liệu](docs/DATA_MODEL.md) và [Lộ trình](docs/ROADMAP.md).
 
-Kế hoạch phát triển tiếp theo được theo dõi trong [Kế hoạch phát triển](docs/DEVELOPMENT_PLAN.md) và [Checklist Sprint 1](docs/DEVELOPMENT_CHECKLIST.md).
+Kế hoạch phát triển tiếp theo được theo dõi trong [Roadmap 6 sprint](docs/DEVELOPMENT_PLAN.md), [Kế hoạch Sprint 1](docs/SPRINT_1_PLAN.md) và [Checklist Sprint 1](docs/DEVELOPMENT_CHECKLIST.md).

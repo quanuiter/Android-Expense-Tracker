@@ -1,6 +1,6 @@
 # Checklist Sprint 1 — Hoàn thiện thu chi local
 
-> Kế hoạch chi tiết: [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)
+> Kế hoạch chi tiết: [SPRINT_1_PLAN.md](SPRINT_1_PLAN.md)
 >
 > Cập nhật gần nhất: 12/09/2026
 
