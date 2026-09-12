@@ -50,3 +50,5 @@ Máy hiện tại đang trỏ `PATH` vào Java 8 và chưa có Android SDK. Có 
 - Không commit `google-services.json`, keystore, ảnh hóa đơn hay file export.
 
 Nếu cần hiểu project từ file đầu tiên, đọc [Hướng dẫn xây dựng từ số 0](docs/HUONG_DAN_XAY_DUNG_TU_ZERO.md). Các tài liệu tham khảo tiếp theo gồm [Kiến trúc](docs/ARCHITECTURE.md), [Mô hình dữ liệu](docs/DATA_MODEL.md) và [Lộ trình](docs/ROADMAP.md).
+
+Kế hoạch phát triển tiếp theo được theo dõi trong [Kế hoạch 12 tuần](docs/DEVELOPMENT_PLAN.md) và [Checklist phát triển](docs/DEVELOPMENT_CHECKLIST.md).
